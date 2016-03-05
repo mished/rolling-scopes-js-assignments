@@ -245,7 +245,7 @@ describe('07-yield-tasks', function() {
             );
             if (index>=expected.length) break;
         }
-
+        assert.equal(index, expected.length, 'getFibonacciSequence should yield elements');
     });
 
 
