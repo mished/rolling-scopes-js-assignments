@@ -740,4 +740,42 @@ describe('04-arrays-tasks', function() {
         });
     });
 
+
+    it.optional('getElementByIndexes should return an element from array by specified indexes', function () {
+        [
+            {
+                arr:      [ [1, 2], [3, 4], [5, 6] ],
+                indexes:  [ 0, 0 ],
+                expected: 1
+            }, {
+                arr:      ['one','two','three'],
+                indexes:  [ 2 ],
+                expected: 'three'
+            }, {
+                arr:      [[[1,2,3]]],
+                indexes:  [ 0, 0, 1 ],
+                expected: 2
+            }
+        ].forEach(data => {
+            var actual = tasks.getElementByIndexes(data.arr, data.indexes);
+            assert.equal(
+                data.expected,
+                actual,
+                `getElementByIndexes(${JSON.stringify(data.arr)}, ${JSON.stringify(data.indexes)}) returns an incorrect result. Expected ${data.expected}, but actual ${actual}`
+            );
+        });
+     });
+
+
+    it.optional('Functions from 04-array-test.js should not use basic loops statements', function () {
+        Object.getOwnPropertyNames(tasks)
+              .filter(x => tasks[x] instanceof Function)
+              .forEach(f => {
+                  assert(
+                      !/([;{]\s*(for|while)\s*\()|(\.forEach\s*\()/.test(tasks[f].toString()),
+                      `Function "${f}" should not use basic loop statements (for, while or Array.forEach)! Please use specialized array methods (Array.map, Array.reduce etc).`
+                  );
+              });
+    });
+     
 });
