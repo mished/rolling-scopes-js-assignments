@@ -33,7 +33,25 @@
  *
  */
 function* get99BottlesOfBeer() {
-    throw new Error('Not implemented');
+    let bottlesCount = 99;
+    while (bottlesCount > 0) {
+        yield `${getWord(bottlesCount)} on the wall, ${getWord(bottlesCount)}.`;
+        bottlesCount -= 1;
+        yield `Take one down and pass it around, ${getWord(bottlesCount)} on the wall.`;
+    }
+    yield `No more bottles of beer on the wall, no more bottles of beer.`;
+    yield `Go to the store and buy some more, 99 bottles of beer on the wall.`;
+    
+    function getWord(bottles) {
+        switch (bottles) {
+            case 1:
+                return '1 bottle of beer';
+            case 0:
+                return 'no more bottles of beer';
+            default:
+                return `${bottles} bottles of beer`;
+        }
+    }
 }
 
 
@@ -152,7 +170,23 @@ function* breadthTraversalTree(root) {
  *   [ 1, 3, 5, ... ], [ -1 ] => [ -1, 1, 3, 5, ...]
  */
 function* mergeSortedSequences(source1, source2) {
-    throw new Error('Not implemented');
+    source1 = source1();
+    source2 = source2();
+    let a = source1.next();
+    let b = source2.next();
+    while (!a.done) {
+        if (b.done) {
+            yield a.value;
+            yield* source1;
+        }
+        yield* [a.value, b.value].sort((a, b) => a - b);
+        a = source1.next();
+        b = source2.next();
+    }
+    if (!b.done) {
+        yield b.value;
+        yield* source2;
+    }
 }
 
 
