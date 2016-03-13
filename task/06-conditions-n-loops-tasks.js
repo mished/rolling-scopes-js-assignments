@@ -30,23 +30,23 @@
  *
  */
 function getFizzBuzz(num) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
 /**
- * Returns the factorial of specified integer n.
+ * Returns the factorial of the specified integer n.
  *
  * @param {number} n
  * @return {number}
  *
- * Example:
+ * @example:
  *   1  => 1
  *   5  => 120
  *   10 => 3628800
  */
 function getFactorial(n) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
@@ -57,13 +57,13 @@ function getFactorial(n) {
  * @param {number} n2
  * @return {number}
  *
- * Example:
+ * @example:
  *   1,2   =>  3  ( = 1+2 )
  *   5,10  =>  45 ( = 5+6+7+8+9+10 )
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
 function getSumBetweenNumbers(n1, n2) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
@@ -75,14 +75,80 @@ function getSumBetweenNumbers(n1, n2) {
  * @param {number} c
  * @return {bool}
  *
- * Example:
+ * @example:
  *   1,2,3    =>  false
  *   3,4,5    =>  true
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
 function isTriangle(a,b,c) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
+}
+
+
+/**
+ * Returns true, if two specified axis-aligned rectangles overlap, otherwise false.
+ * Each rectangle representing by object 
+ *  {
+ *     top: 5,
+ *     left: 5,
+ *     width: 20,
+ *     height: 10
+ *  }
+ * 
+ *  (5;5)
+ *     -------------  
+ *     |           | 
+ *     |           |  height = 10
+ *     ------------- 
+ *        width=20    
+ * 
+ * 
+ * @param {object} rect1
+ * @param {object} rect2
+ * @return {bool}
+ *
+ * @example:
+ *   { top: 0, left: 0, width: 10, height: 10 },
+ *   { top: 5, left: 5, width: 20, height: 20 }    =>  true
+ * 
+ *   { top: 0, left: 0, width: 10, height: 10 },
+ *   { top:20, left:20, width: 20, height: 20 }    =>  false
+ *  
+ */
+function doRectanglesOverlap(rect1, rect2) {
+    throw new Error('Not implemented');
+}
+
+
+/**
+ * Returns true, if point lies inside the circle, otherwise false.
+ * Circle is an object of 
+ *  {
+ *     center: {
+ *       x: 5,       
+ *       y: 5
+ *     },        
+ *     radius: 20
+ *  }
+ * 
+ * Point is object of 
+ *  {
+ *     x: 5,
+ *     y: 5
+ *  }
+ * 
+ * @param {object} circle
+ * @param {object} point
+ * @return {bool}
+ *
+ * @example:
+ *   { center: { x:0, y:0 }, radius:10 },  { x:0, y:0 }     => true
+ *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
+ *   
+ */
+function isInsideCircle(circle, point) {
+    throw new Error('Not implemented');
 }
 
 
@@ -92,13 +158,13 @@ function isTriangle(a,b,c) {
  * @param {string} str
  * @return {string}
  *
- * Example:
+ * @example:
  *   'The quick brown fox jumps over the lazy dog' => 'T'
  *   'abracadabra'  => 'c'
  *   'entente' => null
  */
 function findFirstSingleChar(str) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
@@ -120,11 +186,11 @@ function findFirstSingleChar(str) {
  *   0, 1, false, true  => '(0, 1]'
  *   0, 1, false, false => '(0, 1)'
  * Smaller number has to be first :
- *   5, 3, true, true   => '[3,5]'
+ *   5, 3, true, true   => '[3, 5]'
  *
  */
 function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
@@ -134,15 +200,14 @@ function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
  * @param {string} str
  * @return {string}
  *
- * Example:
+ * @example:
  * 'The quick brown fox jumps over the lazy dog' => 'god yzal eht revo spmuj xof nworb kciuq ehT'
  * 'abracadabra' => 'arbadacarba'
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
- *
  */
 function reverseString(str) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
@@ -152,14 +217,14 @@ function reverseString(str) {
  * @param {number} num
  * @return {number}
  *
- * Example:
+ * @example:
  *   12345 => 54321
  *   1111  => 1111
  *   87354 => 45378
  *   34143 => 34143
  */
 function reverseInteger(num) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
@@ -172,7 +237,7 @@ function reverseInteger(num) {
  * @param {number} cnn
  * @return {boolean}
  *
- * Example:
+ * @example:
  *   79927398713      => true
  *   4012888888881881 => true
  *   5123456789012346 => true
@@ -182,10 +247,9 @@ function reverseInteger(num) {
  *   4571234567890111 => false
  *   5436468789016589 => false
  *   4916123456789012 => false
- *
  */
 function isCreditCardNumber(ccn) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
@@ -197,19 +261,19 @@ function isCreditCardNumber(ccn) {
  * @param {number} n
  * @return {number}
  *
- * Example:
+ * @example:
  *   12345 ( 1+2+3+4+5 = 15, 1+5 = 6) => 6
  *   23456 ( 2+3+4+5+6 = 20, 2+0 = 2) => 2
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
 function getDigitalRoot(num) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
 /**
- * Returns the true if specified string has the balanced brackets and false otherwise
+ * Returns true if the specified string has the balanced brackets and false otherwise.
  * Balanced means that is, whether it consists entirely of pairs of opening/closing brackets
  * (in that order), none of which mis-nest.
  * Brackets include [],(),{},<>
@@ -217,7 +281,7 @@ function getDigitalRoot(num) {
  * @param {string} str
  * @return {boolean}
  *
- * Example:
+ * @example:
  *   '' => true
  *   '[]'  => true
  *   '{}'  => true
@@ -230,7 +294,7 @@ function getDigitalRoot(num) {
  *   '{[(<{[]}>)]}' = true 
  */
 function isBracketsBalanced(str) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
@@ -266,7 +330,7 @@ function isBracketsBalanced(str) {
  *
  */
 function timespanToHumanString(startDate, endDate) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
@@ -278,10 +342,10 @@ function timespanToHumanString(startDate, endDate) {
  * https://en.wikipedia.org/wiki/Radix
  *
  * @param {number} num
- * @param {number} n
+ * @param {number} n, radix of the result
  * @return {string}
  *
- * Example:
+ * @example:
  *   1024, 2  => '10000000000'
  *   6561, 3  => '100000000'
  *    365, 2  => '101101101'
@@ -290,7 +354,7 @@ function timespanToHumanString(startDate, endDate) {
  *    365, 10 => '365'
  */
 function toNaryString(num, n) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
@@ -300,14 +364,14 @@ function toNaryString(num, n) {
  * @param {array} pathes
  * @return {string}
  *
- * Example:
+ * @example:
  *   ['/web/images/image1.png', '/web/images/image2.png']  => '/web/images/'
  *   ['/web/assets/style.css', '/web/scripts/app.js',  'home/setting.conf'] => ''
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
 function getCommonDirectoryPath(pathes) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
@@ -319,7 +383,7 @@ function getCommonDirectoryPath(pathes) {
  * @param {array} m2
  * @return {array}
  *
- * Example:
+ * @example:
  *   [[ 1, 0, 0 ],       [[ 1, 2, 3 ],           [[ 1, 2, 3 ],
  *    [ 0, 1, 0 ],   X    [ 4, 5, 6 ],     =>     [ 4, 5, 6 ],
  *    [ 0, 0, 1 ]]        [ 7, 8, 9 ]]            [ 7, 8, 9 ]]
@@ -330,7 +394,7 @@ function getCommonDirectoryPath(pathes) {
  *
  */
 function getMatrixProduct(m1, m2) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
@@ -365,7 +429,7 @@ function getMatrixProduct(m1, m2) {
  *
  */
 function evaluateTicTacToePosition(position) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
@@ -374,6 +438,8 @@ module.exports = {
     getFactorial: getFactorial,
     getSumBetweenNumbers: getSumBetweenNumbers,
     isTriangle: isTriangle,
+    doRectanglesOverlap: doRectanglesOverlap,
+    isInsideCircle: isInsideCircle,
     findFirstSingleChar: findFirstSingleChar,
     getIntervalString : getIntervalString,
     reverseString: reverseString,

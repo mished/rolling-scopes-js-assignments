@@ -52,7 +52,7 @@ function getRegexForGuid() {
  * @return {RegExp}
  *
  */
-function getRegexForPitSpot(n) {
+function getRegexForPitSpot() {
    throw new Error('Not implemented');
 }
 
@@ -71,7 +71,7 @@ function getRegexForPitSpot(n) {
  *
  * @return {RegExp}
  */
-function getRegexForIPv4(n) {
+function getRegexForIPv4() {
    throw new Error('Not implemented');
 }
 
@@ -88,10 +88,9 @@ function getRegexForIPv4(n) {
  * '875-43-0298'                     '875-00-0298'
  * '034-01-0008'                     '034-01-0000'
  *                                   '0S4-H1-HACK'
- *
  * @return {RegExp}
  */
-function getRegexForSSN(n) {
+function getRegexForSSN() {
    throw new Error('Not implemented');
 }
 

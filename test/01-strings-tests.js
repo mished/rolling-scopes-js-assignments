@@ -13,8 +13,8 @@ describe('01-strings-tasks', function() {
     });
 
     it.optional('getStringLength should return the length of string', function() {
-        assert.equal(5, tasks.getStringLength('aaaaa'));
-        assert.equal(0, tasks.getStringLength(''));
+        assert.equal(5, tasks.getStringLength('aaaaa'), "'aaaaa' length should be 5");
+        assert.equal(0, tasks.getStringLength(''), "'' length should be 0");
     });
 
     it.optional('getStringFromTemplate should create a string from template using given parameters', function() {
@@ -60,7 +60,7 @@ describe('01-strings-tasks', function() {
         assert.equal('ABCDEFGHIJKLMNOPQRSTUVWXYZ', tasks.convertToUpperCase('abcdefghijklmnopqrstuvwxyz'));
     });
 
-    it.optional('extractEmails should convert all chars from specified string into upper case', function() {
+    it.optional('extractEmails should extract emails from string list delimeted by semicolons', function() {
         assert.deepEqual(
             ['angus.young@gmail.com', 'brian.johnson@hotmail.com', 'bon.scott@yahoo.com'],
             tasks.extractEmails('angus.young@gmail.com;brian.johnson@hotmail.com;bon.scott@yahoo.com')
@@ -103,11 +103,11 @@ describe('01-strings-tasks', function() {
     });
 
     it.optional('isString should return true if argument ia a string', function() {
-        assert.equal(false, tasks.isString());
-        assert.equal(false, tasks.isString(null));
-        assert.equal(false, tasks.isString([]));
-        assert.equal(true, tasks.isString('test'));
-        assert.equal(true, tasks.isString(new String('test')));
+        assert.equal(false, tasks.isString(), "undefined");
+        assert.equal(false, tasks.isString(null), "null");
+        assert.equal(false, tasks.isString([]), "[]");
+        assert.equal(true, tasks.isString('test'), "test");
+        assert.equal(true, tasks.isString(new String('test')), "new String('test')");
     });
     
     it.optional('getCardId should return the index of card in the initial deck', function() {
