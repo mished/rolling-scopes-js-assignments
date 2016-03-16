@@ -228,13 +228,17 @@ function encodeToRot13(str) {
     return str.replace(/\w/g, (char) => getTargetChar(char));
     
     function getTargetChar(ch) {
-        const baseCharCode = (ch.toUpperCase() === ch)
-            ? 'A'.charCodeAt(0)
-            : 'a'.charCodeAt(0);
-        const charIndex = ch.charCodeAt(0) - baseCharCode;
+        const lettersCount = 26;
+        const lowercaseOffset = 'a'.charCodeAt(0);
+        const uppercaseOffset = 'A'.charCodeAt(0);
+        const offset = (ch.toUpperCase() === ch)
+            ? uppercaseOffset
+            : lowercaseOffset;
+        const charIndex = ch.charCodeAt(0) - offset;
         const targetCharIndex = charIndex + 13;
-        return String.fromCharCode(baseCharCode +
-            ((targetCharIndex > 25) ? targetCharIndex - 26 : targetCharIndex)
+        return String.fromCharCode(offset +
+            ((targetCharIndex > lettersCount - 1) ? targetCharIndex - lettersCount
+                                                  : targetCharIndex)
         );
     }
 }
