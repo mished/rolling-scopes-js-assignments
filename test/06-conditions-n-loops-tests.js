@@ -337,6 +337,23 @@ describe('06-conditions-n-loops-tasks', function() {
     });
 
 
+    it.optional('getDigitalRoot should return the cyclic sum of all digits', () => {
+        [
+            { num: 12345, expected: 6 },
+            { num: 23456, expected: 2 },
+            { num: 10000, expected: 1 },
+            { num: 165536, expected: 8 }
+        ].forEach(data => {
+            var actual = tasks.getDigitalRoot(data.num);
+            assert.equal(
+                actual,
+                data.expected,
+                `GetDigitalRoot(${data.num}) = ${data.expected}, but actual ${actual}`
+            )
+        });
+    });
+
+
    it.optional('isBracketsBalanced should check the balanced brackets', () => {
         [
             '[]', '[[][][[]]]', '[[][]]', '', '<>', '{}', '()', '<()>', '{<>}', '[{}]',
@@ -568,15 +585,15 @@ describe('06-conditions-n-loops-tasks', function() {
             },{
                 startDate: '2000-01-01 00:00:00.000',
                 endDate:   '2000-12-12 00:00:00.000',
-                expected:  'an year ago'
+                expected:  'a year ago'
             },{
                 startDate: '2000-01-01 00:00:00.000',
                 endDate:   '2001-02-15 00:00:00.001',
-                expected:  'an year ago'
+                expected:  'a year ago'
             },{
                 startDate: '2000-01-01 00:00:00.000',
                 endDate:   '2001-06-01 00:00:00.001',
-                expected:  'an year ago'
+                expected:  'a year ago'
             },{
                 startDate: '2000-01-01 00:00:00.000',
                 endDate:   '2015-02-15 00:00:00.001',
