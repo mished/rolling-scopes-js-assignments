@@ -572,10 +572,10 @@ function getElementByIndexes(arr, indexes) {
  * 
  */
 function swapHeadAndTail(arr) {
-    throw new Error('Not implemented');
-    let middle = Math.floor(arr.length / 2);
-    let tail = (arr.length % 2 === 0) ? arr.slice(middle) : arr.slice(middle + 1);
-    let head = (arr.length % 2 === 0) ? arr.slice(0, middle) : [arr[middle]].concat(arr.slice(0, middle));
+    const middle = Math.floor(arr.length / 2);
+    const isEven = arr.length % 2 === 0;
+    const tail = isEven ? arr.slice(middle) : arr.slice(middle + 1);
+    const head = isEven ? arr.slice(0, middle) : [arr[middle]].concat(arr.slice(0, middle));
     return tail.concat(head);
 }
 
