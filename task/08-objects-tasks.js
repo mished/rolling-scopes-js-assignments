@@ -23,8 +23,13 @@
  *    console.log(r.getArea());   // => 200
  */
 function Rectangle(width, height) {
-    throw new Error('Not implemented');
+    this.width = width;
+    this.height = height;
 }
+
+Rectangle.prototype.getArea = function () {
+    return this.width * this.height;
+};
 
 
 /**
@@ -38,7 +43,7 @@ function Rectangle(width, height) {
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
 function getJSON(obj) {
-    throw new Error('Not implemented');
+    return JSON.stringify(obj);
 }
 
 
@@ -54,7 +59,7 @@ function getJSON(obj) {
  *
  */
 function fromJSON(proto, json) {
-    throw new Error('Not implemented');
+    return Object.setPrototypeOf(JSON.parse(json), proto);
 }
 
 
@@ -106,34 +111,133 @@ function fromJSON(proto, json) {
  *  For more examples see unit tests.
  */
 
+class CssSelector {
+    
+    element(value) {
+        if (this.elementName) {
+            throw new Error('Element name already defined');
+        }
+        if (anyExist([this.idName, this.classNames, this.attrNames,
+            this.pseudoClassNames, this.pseudoElementName])) {
+            throw new Error('Wrong order');
+        }
+        this.elementName = value;
+        return this;
+    }
+    
+    id(value) {
+        if (this.idName) {
+            throw new Error('Id already defined');
+        }
+        if (anyExist([this.classNames, this.attrNames,
+            this.pseudoClassNames, this.pseudoElementName])) {
+            throw new Error('Wrong order');
+        }
+        this.idName = `#${value}`;
+        return this;
+    }
+    
+    class(value) {
+        if (anyExist([this.attrNames, this.pseudoClassNames,
+            this.pseudoElementName])) {
+            throw new Error('Wrong order');
+        }
+        if (!this.classNames) { this.classNames = []; }
+        this.classNames.push(`.${value}`);
+        return this;
+    }
+    
+    attr(value) {
+        if (anyExist([this.pseudoClassNames, this.pseudoElementName])) {
+            throw new Error('Wrong order');
+        }
+        if (!this.attrNames) { this.attrNames = []; }
+        this.attrNames.push(`[${value}]`);
+        return this;
+    }
+    
+    pseudoClass(value) {
+        if (this.pseudoElementName) {
+            throw new Error('Wrong order');
+        }
+        if (!this.pseudoClassNames) { this.pseudoClassNames = []; }
+        this.pseudoClassNames.push(`:${value}`);
+        return this;
+    }
+    
+    pseudoElement(value) {
+        if (this.pseudoElementName) {
+            throw new Error('Pseudo element already defined');
+        }
+        this.pseudoElementName = `::${value}`;
+        return this;
+    }
+    
+    getSelectorsArray() {
+        return [this.elementName, this.idName, this.classNames,
+            this.attrNames, this.pseudoClassNames, this.pseudoElementName]
+            .reduce((p, c) => c ? p.concat(c) : p, []);
+    }
+    
+    stringify() {
+        return this.getSelectorsArray()
+            .join('');
+    }
+}
+
+class CombinedSelector {
+    constructor(selectors) {
+        this.selectors = selectors || [];
+    }
+    
+    getSelectorsArray() {
+        return this.selectors;
+    }
+    
+    stringify() {
+        return this.getSelectorsArray()
+            .join('');
+    }
+    
+    static combine(selector1, combinator, selector2) {
+        return new CombinedSelector(selector1.getSelectorsArray().concat(
+            ` ${combinator} `,
+            selector2.getSelectorsArray()));
+    }
+}
+
+function anyExist(values) {
+    return values.some(x => x);
+}
+
 const cssSelectorBuilder = {
 
     element: function(value) {
-        throw new Error('Not implemented');
+        return new CssSelector().element(value);
     },
 
     id: function(value) {
-        throw new Error('Not implemented');
+        return new CssSelector().id(value);
     },
 
     class: function(value) {
-        throw new Error('Not implemented');
+        return new CssSelector().class(value);
     },
 
     attr: function(value) {
-        throw new Error('Not implemented');
+        return new CssSelector().attr(value);
     },
 
     pseudoClass: function(value) {
-        throw new Error('Not implemented');
+        return new CssSelector().pseudoClass(value);
     },
 
     pseudoElement: function(value) {
-        throw new Error('Not implemented');
+        return new CssSelector().pseudoElement(value);
     },
 
     combine: function(selector1, combinator, selector2) {
-        throw new Error('Not implemented');
+        return CombinedSelector.combine(selector1, combinator, selector2);
     },
 };
 
