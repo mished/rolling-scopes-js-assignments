@@ -85,19 +85,7 @@ function isLeapYear(date) {
  */
 function timeSpanToString(startDate, endDate) {
     const ts = new Date(endDate.getTime() - startDate.getTime());
-    const h = padWithZeros(ts.getUTCHours(), 2);
-    const m = padWithZeros(ts.getUTCMinutes(), 2);
-    const s = padWithZeros(ts.getUTCSeconds(), 2);
-    const ms = padWithZeros(ts.getUTCMilliseconds(), 3);
-    return `${h}:${m}:${s}.${ms}`;
-    
-    function padWithZeros(val, len) {
-        let result = val.toString(10);
-        while (result.length !== len) {
-            result = '0' + result;
-        }
-        return result;
-    }
+    return ts.toISOString().slice(11, -1);
 }
 
 
