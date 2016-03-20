@@ -488,7 +488,7 @@ function getIntervalArray(start, end) {
  *   [ 1, 1, 2, 2, 3, 3, 4, 4] => [ 1, 2, 3, 4]
  */
 function distinct(arr) {
-    return arr.reduce((p, c) => (p.indexOf(c) === -1) ? p.concat(c) : p, []);
+    return Array.from(arr.reduce((p, c) => p.add(c), new Set()));
 }
 
 /**
