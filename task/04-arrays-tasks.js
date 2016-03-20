@@ -522,11 +522,13 @@ function distinct(arr) {
  *   }
  */
 function group(array, keySelector, valueSelector) {
-    return array.reduce((p, c) =>
-        p.set(keySelector(c),
-            (p.get(keySelector(c)) || []).concat(valueSelector(c))),
-        new Map()
-    );
+    return array.reduce((p, c) => {
+        const key = keySelector(c);
+        const value = valueSelector(c);
+        const element = p.get(key) || [];
+        element.push(value);
+        return p.set(key, element);
+    }, new Map());
 }
 
 
