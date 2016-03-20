@@ -360,7 +360,10 @@ function getItemsSum(arr) {
  *  [ null, undefined, NaN, false, 0, '' ]  => 6
  */
 function getFalsyValuesCount(arr) {
-    return arr.filter(x => !x).length;
+    return arr.reduce((p, c) => {
+        if (!c) { p += 1; }
+        return p;
+    }, 0);
 }
 
 /**
@@ -378,7 +381,10 @@ function getFalsyValuesCount(arr) {
  *    [ true, 0, 1, 'true' ], true => 1
  */
 function findAllOccurences(arr, item) {
-    return arr.filter(x => x === item).length;
+    return arr.reduce((p, c) => {
+        if (c === item) { p += 1; }
+        return p;
+    }, 0);
 }
 
 /**
