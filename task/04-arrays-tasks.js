@@ -307,7 +307,10 @@ function get3TopItems(arr) {
  *   [ null, 1, 'elephant' ] => 1
  */
 function getPositivesCount(arr) {
-    return arr.filter(x => x > 0).length;
+    return arr.reduce((p, c) => {
+        if (c > 0) { p += 1; }
+        return p;
+    }, 0);
 }
  
 /** 
