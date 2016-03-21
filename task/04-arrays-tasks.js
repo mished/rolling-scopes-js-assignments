@@ -407,6 +407,7 @@ function toStringList(arr) {
  * Sorts the specified array by country name first and city name (if countries are equal) in ascending order.
  * 
  * @param {array} arr
+ * @param {array} compareKeys - Field names to be used in compare function in provided order
  * @return {array}
  * 
  * @example
@@ -427,9 +428,17 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Moscow' },
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  */
-function sortCitiesArray(arr) {
-    return arr.sort((a, b) =>
-        (a.country + a.city <= b.country + b.city) ? -1 : 1);
+function sortCitiesArray(arr, compareKeys) {
+    compareKeys = compareKeys || ['country', 'city'];
+    return arr.sort(citiesComparer);
+    
+    function citiesComparer(a, b) {
+        return getCompareValue(a).localeCompare(getCompareValue(b));
+    }
+    
+    function getCompareValue(obj) {
+        return compareKeys.map(x => obj[x]).join('');
+    }
 }
 
 /**
