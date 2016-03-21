@@ -137,7 +137,7 @@ const CssSelector = (function () {
             throw new Error(errorMessage);
         }
         selector.selectorParts.push(value);
-        selector.currentState = nextState;
+        selector.currentState = nextState || validState;
         return scope;
     }
     
@@ -157,15 +157,15 @@ const CssSelector = (function () {
         },
         
         class: function (value) {
-            return addPart(this, `.${value}`, State.CLASS, State.CLASS);
+            return addPart(this, `.${value}`, State.CLASS);
         },
         
         attr: function (value) {
-            return addPart(this, `[${value}]`, State.ATTR, State.ATTR);
+            return addPart(this, `[${value}]`, State.ATTR);
         },
         
         pseudoClass: function (value) {
-            return addPart(this, `:${value}`, State.PSEUDO_CLASS, State.PSEUDO_CLASS);
+            return addPart(this, `:${value}`, State.PSEUDO_CLASS);
         },
         
         pseudoElement: function (value) {
