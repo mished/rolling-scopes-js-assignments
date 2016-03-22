@@ -235,10 +235,7 @@ function toArrayOfSquares(arr) {
  */
 function getMovingSum(arr) {
     let sum = 0;
-    return arr.map(x => {
-        sum += x;
-        return sum;
-    });
+    return arr.map(x => sum += x);
 }
 
 /**
@@ -307,10 +304,7 @@ function get3TopItems(arr) {
  *   [ null, 1, 'elephant' ] => 1
  */
 function getPositivesCount(arr) {
-    return arr.reduce((p, c) => {
-        if (c > 0) { p += 1; }
-        return p;
-    }, 0);
+    return arr.reduce((p, c) => p + (c > 0), 0);
 }
  
 /** 
@@ -360,10 +354,7 @@ function getItemsSum(arr) {
  *  [ null, undefined, NaN, false, 0, '' ]  => 6
  */
 function getFalsyValuesCount(arr) {
-    return arr.reduce((p, c) => {
-        if (!c) { p += 1; }
-        return p;
-    }, 0);
+    return arr.reduce((p, c) => p + !c, 0);
 }
 
 /**
@@ -381,10 +372,7 @@ function getFalsyValuesCount(arr) {
  *    [ true, 0, 1, 'true' ], true => 1
  */
 function findAllOccurences(arr, item) {
-    return arr.reduce((p, c) => {
-        if (c === item) { p += 1; }
-        return p;
-    }, 0);
+    return arr.reduce((p, c) => p + (c === item), 0);
 }
 
 /**
