@@ -111,7 +111,8 @@ function fromJSON(proto, json) {
  */
 
 const CssSelector = (function () {
-    const errorMessage = 'Incorrect selector definition.';
+    const extraPartsErrorMsg = 'Element, id and pseudo-element should not occur more then one time inside the selector';
+    const invalidOrderErrorMsg = 'Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element';
     const map = new WeakMap();
     
     const State = Object.freeze({
@@ -131,10 +132,16 @@ const CssSelector = (function () {
         return map.get(ref);
     }
     
-    function addPart(scope, value, validState, nextState) {
+    function addPart(scope, value, validState, nextState, isUniquePart) {
         const selector = internal(scope);
+        if (selector.alreadyCalled[validState]) {
+            throw new Error(extraPartsErrorMsg);
+        }
         if (selector.currentState > validState) {
-            throw new Error(errorMessage);
+            throw new Error(invalidOrderErrorMsg);
+        }
+        if (isUniquePart) {
+            selector.alreadyCalled[validState] = true;
         }
         selector.selectorParts.push(value);
         selector.currentState = nextState || validState;
@@ -142,18 +149,20 @@ const CssSelector = (function () {
     }
     
     function CssSelector(selector, state) {
-        internal(this).selectorParts = selector || [];
-        internal(this).currentState = state || State.ELEMENT;
+        const internalThis = internal(this);
+        internalThis.selectorParts = selector || [];
+        internalThis.currentState = state || State.ELEMENT;
+        internalThis.alreadyCalled = {};
     }
     
     CssSelector.prototype = {
         
         element: function (value) {
-            return addPart(this, value, State.ELEMENT, State.ID);
+            return addPart(this, value, State.ELEMENT, State.ID, true);
         },
         
         id: function (value) {
-            return addPart(this, `#${value}`, State.ID, State.CLASS);
+            return addPart(this, `#${value}`, State.ID, State.CLASS, true);
         },
         
         class: function (value) {
@@ -169,7 +178,7 @@ const CssSelector = (function () {
         },
         
         pseudoElement: function (value) {
-            return addPart(this, `::${value}`, State.PSEUDO_ELEMENT, State.COMBINED_SELECTOR);
+            return addPart(this, `::${value}`, State.PSEUDO_ELEMENT, State.COMBINED_SELECTOR, true);
         },
         
         combine: function (selector, combinator) {
