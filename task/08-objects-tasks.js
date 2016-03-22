@@ -114,7 +114,7 @@ const CssSelector = (function () {
     const errorMessage = 'Incorrect selector definition.';
     const map = new WeakMap();
     
-    const Order = Object.freeze({
+    const State = Object.freeze({
         ELEMENT: 0,
         ID: 1,
         CLASS: 2,
@@ -131,57 +131,53 @@ const CssSelector = (function () {
         return map.get(ref);
     }
     
-    function addPart(value, validState, nextState) {
-        if (this.currentOrder > validState) {
+    function addPart(scope, value, validState, nextState) {
+        const selector = internal(scope);
+        if (selector.currentState > validState) {
             throw new Error(errorMessage);
         }
-        this.selectorParts.push(value);
-        this.currentOrder = nextState;
+        selector.selectorParts.push(value);
+        selector.currentState = nextState || validState;
+        return scope;
     }
     
-    function CssSelector(selector, order) {
-        internal(this).currentOrder = order || Order.ELEMENT;
+    function CssSelector(selector, state) {
         internal(this).selectorParts = selector || [];
+        internal(this).currentState = state || State.ELEMENT;
     }
     
     CssSelector.prototype = {
         
         element: function (value) {
-            addPart.call(internal(this), value, Order.ELEMENT, Order.ID);
-            return this;
+            return addPart(this, value, State.ELEMENT, State.ID);
         },
         
         id: function (value) {
-            addPart.call(internal(this), `#${value}`, Order.ID, Order.CLASS);
-            return this;
+            return addPart(this, `#${value}`, State.ID, State.CLASS);
         },
         
         class: function (value) {
-            addPart.call(internal(this), `.${value}`, Order.CLASS, Order.CLASS);
-            return this;
+            return addPart(this, `.${value}`, State.CLASS);
         },
         
         attr: function (value) {
-            addPart.call(internal(this), `[${value}]`, Order.ATTR, Order.ATTR);
-            return this;
+            return addPart(this, `[${value}]`, State.ATTR);
         },
         
         pseudoClass: function (value) {
-            addPart.call(internal(this), `:${value}`, Order.PSEUDO_CLASS, Order.PSEUDO_CLASS);
-            return this;
+            return addPart(this, `:${value}`, State.PSEUDO_CLASS);
         },
         
         pseudoElement: function (value) {
-            addPart.call(internal(this), `::${value}`, Order.PSEUDO_ELEMENT, Order.COMBINED_SELECTOR);
-            return this;
+            return addPart(this, `::${value}`, State.PSEUDO_ELEMENT, State.COMBINED_SELECTOR);
         },
         
         combine: function (selector, combinator) {
             const combinedSelector = internal(this).selectorParts.concat(
                 ` ${combinator} `,
                 internal(selector).selectorParts
-                );
-            return new CssSelector(combinedSelector, Order.COMBINED_SELECTOR);
+            );
+            return new CssSelector(combinedSelector, State.COMBINED_SELECTOR);
         },
         
         stringify: function () {
