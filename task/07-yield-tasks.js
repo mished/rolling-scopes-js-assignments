@@ -179,7 +179,8 @@ function* mergeSortedSequences(source1, source2) {
             yield a.value;
             yield* source1;
         }
-        yield* [a.value, b.value].sort((a, b) => a - b);
+        yield Math.min(a.value, b.value);
+        yield Math.max(a.value, b.value);
         a = source1.next();
         b = source2.next();
     }

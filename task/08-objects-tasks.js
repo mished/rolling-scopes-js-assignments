@@ -132,7 +132,7 @@ const CssSelector = (function () {
         return map.get(ref);
     }
     
-    function addPart(scope, value, validState, nextState, isUniquePart) {
+    function addPart(scope, value, validState, nextState) {
         const selector = internal(scope);
         if (selector.alreadyCalled[validState]) {
             throw new Error(extraPartsErrorMsg);
@@ -140,29 +140,28 @@ const CssSelector = (function () {
         if (selector.currentState > validState) {
             throw new Error(invalidOrderErrorMsg);
         }
-        if (isUniquePart) {
+        if (nextState) {
             selector.alreadyCalled[validState] = true;
         }
-        selector.selectorParts.push(value);
+        scope.selector += value;
         selector.currentState = nextState || validState;
         return scope;
     }
     
     function CssSelector(selector, state) {
-        const internalThis = internal(this);
-        internalThis.selectorParts = selector || [];
-        internalThis.currentState = state || State.ELEMENT;
-        internalThis.alreadyCalled = {};
+        this.selector = selector || '';
+        internal(this).currentState = state || State.ELEMENT;
+        internal(this).alreadyCalled = {};
     }
     
     CssSelector.prototype = {
         
         element: function (value) {
-            return addPart(this, value, State.ELEMENT, State.ID, true);
+            return addPart(this, value, State.ELEMENT, State.ID);
         },
         
         id: function (value) {
-            return addPart(this, `#${value}`, State.ID, State.CLASS, true);
+            return addPart(this, `#${value}`, State.ID, State.CLASS);
         },
         
         class: function (value) {
@@ -178,19 +177,16 @@ const CssSelector = (function () {
         },
         
         pseudoElement: function (value) {
-            return addPart(this, `::${value}`, State.PSEUDO_ELEMENT, State.COMBINED_SELECTOR, true);
+            return addPart(this, `::${value}`, State.PSEUDO_ELEMENT, State.COMBINED_SELECTOR);
         },
         
-        combine: function (selector, combinator) {
-            const combinedSelector = internal(this).selectorParts.concat(
-                ` ${combinator} `,
-                internal(selector).selectorParts
-            );
+        combine: function (second, combinator) {
+            const combinedSelector = `${this.selector} ${combinator} ${second.selector}`;
             return new CssSelector(combinedSelector, State.COMBINED_SELECTOR);
         },
         
         stringify: function () {
-            return internal(this).selectorParts.join('');
+            return this.selector;
         }
     };
     

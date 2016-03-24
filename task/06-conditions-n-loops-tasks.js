@@ -30,7 +30,10 @@
  *
  */
 function getFizzBuzz(num) {
-    throw new Error('Not implemented');
+    let res = '';
+    if (num % 3 === 0) { res += 'Fizz'; }
+    if (num % 5 === 0) { res += 'Buzz'; }
+    return res || num;
 }
 
 
@@ -46,7 +49,11 @@ function getFizzBuzz(num) {
  *   10 => 3628800
  */
 function getFactorial(n) {
-    throw new Error('Not implemented');
+    let res = 1;
+    for (let i = 1; i <= n; ++i) {
+        res *= i;
+    }
+    return res;
 }
 
 
@@ -63,7 +70,11 @@ function getFactorial(n) {
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
 function getSumBetweenNumbers(n1, n2) {
-    throw new Error('Not implemented');
+    let sum = 0;
+    for (let i = n1; i <= n2; ++i) {
+        sum += i;
+    }
+    return sum;
 }
 
 
@@ -82,7 +93,9 @@ function getSumBetweenNumbers(n1, n2) {
  *   10,10,10 =>  true
  */
 function isTriangle(a,b,c) {
-    throw new Error('Not implemented');
+    return a + b > c
+        && a + c > b
+        && c + b > a;
 }
 
 
@@ -166,7 +179,20 @@ function isInsideCircle(circle, point) {
  *   'entente' => null
  */
 function findFirstSingleChar(str) {
-    throw new Error('Not implemented');
+    let i, j, isUnique;
+    for (i = 0; i < str.length; ++i) {
+        isUnique = true;
+        for (j = 0; j < str.length; ++j) {
+            if (str[i] === str[j] && i !== j) {
+                isUnique = false;
+                break;
+            }
+        }
+        if (isUnique) {
+            return str[i];
+        }
+    }
+    return null;
 }
 
 
@@ -192,7 +218,11 @@ function findFirstSingleChar(str) {
  *
  */
 function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
-    throw new Error('Not implemented');
+    const start = isStartIncluded ? '[' : '(';
+    const end = isEndIncluded ? ']' : ')';
+    const max = Math.max(a, b);
+    const min = Math.min(a, b);
+    return `${start}${min}, ${max}${end}`;
 }
 
 
@@ -209,7 +239,11 @@ function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
  * 'noon' => 'noon'
  */
 function reverseString(str) {
-    throw new Error('Not implemented');
+    let res = '';
+    for (let i = str.length - 1; i >= 0; --i) {
+        res += str[i];
+    }
+    return res;
 }
 
 
