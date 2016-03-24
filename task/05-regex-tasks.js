@@ -73,7 +73,8 @@ function getRegexForPitSpot() {
  * @return {RegExp}
  */
 function getRegexForIPv4() {
-    return /^(?:(?:(?:25[0-5])|(?:2[0-4]\d)|(?:[01]{0,2}\d{1,2}))\.?){4}$/;
+    const num = '(?:(?:25[0-5])|(?:2[0-4]\\d)|(?:[01]{0,2}\\d{1,2}))';
+    return new RegExp(`^${num}.${num}.${num}.${num}$`);
 }
 
 
