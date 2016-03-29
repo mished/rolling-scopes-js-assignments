@@ -260,7 +260,12 @@ function reverseString(str) {
  *   34143 => 34143
  */
 function reverseInteger(num) {
-    throw new Error('Not implemented');
+    let res = '';
+    while (num > 0) {
+        res += num % 10;
+        num = num / 10 >>> 0;
+    }
+    return parseInt(res, 10);
 }
 
 
