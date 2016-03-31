@@ -260,12 +260,13 @@ function reverseString(str) {
  *   34143 => 34143
  */
 function reverseInteger(num) {
-    let res = '';
+    let res = 0;
     while (num > 0) {
+        res *= 10;
         res += num % 10;
         num = num / 10 >>> 0;
     }
-    return parseInt(res, 10);
+    return res;
 }
 
 
@@ -309,7 +310,20 @@ function isCreditCardNumber(ccn) {
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
 function getDigitalRoot(num) {
-    throw new Error('Not implemented');
+    let sum = getDigitsSum(num)
+    while (sum > 9) {
+        sum = getDigitsSum(sum);
+    }
+    return sum;
+    
+    function getDigitsSum(num) {
+        let res = 0;
+        while (num > 0) {
+            res += num % 10;
+            num = num / 10 >>> 0;
+        }
+        return res;
+    }
 }
 
 
@@ -335,7 +349,19 @@ function getDigitalRoot(num) {
  *   '{[(<{[]}>)]}' = true 
  */
 function isBracketsBalanced(str) {
-    throw new Error('Not implemented');
+    const closingBracketPair = { ']': '[', '}': '{', ')': '(', '>': '<' };
+    const stack = [];
+    
+    for (let bracket of str) {
+        if (!closingBracketPair[bracket]) {
+            stack.push(bracket);
+        } else if (stack[stack.length - 1] === closingBracketPair[bracket]) {
+            stack.pop();
+        } else {
+            return false;
+        }
+    }
+    return stack.length === 0;
 }
 
 
@@ -395,7 +421,12 @@ function timespanToHumanString(startDate, endDate) {
  *    365, 10 => '365'
  */
 function toNaryString(num, n) {
-    throw new Error('Not implemented');
+    let res = '';
+    while (num !== 0) {
+        res = num % n + res;
+        num = num / n >>> 0;
+    }
+    return res;
 }
 
 
@@ -412,7 +443,19 @@ function toNaryString(num, n) {
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
 function getCommonDirectoryPath(pathes) {
-    throw new Error('Not implemented');
+    let cmnIndex;
+    const first = pathes[0];
+    for (let i = 0; i < first.length; ++i) {
+        if (pathes.some(x => x[i] !== first[i])) {
+            break;
+        }
+        if (first[i] === '/' || (i === first.length - 1)) {
+            cmnIndex = i;
+        }
+    }
+    if (cmnIndex === undefined) { return ''; }
+    if (cmnIndex === 0) { return first[0]; }
+    return first.slice(0, cmnIndex + 1);
 }
 
 
@@ -435,7 +478,17 @@ function getCommonDirectoryPath(pathes) {
  *
  */
 function getMatrixProduct(m1, m2) {
-    throw new Error('Not implemented');
+    const res = [];
+    for (let i = 0; i < m1.length; ++i) {
+        res[i] = [];
+        for (let j = 0; j < m1.length; ++j) {
+            res[i][j] = 0;
+            for (let k = 0; k < m2.length; ++k) {
+                res[i][j] += m1[i][k] * m2[k][j];
+            }
+        }
+    }
+    return res;
 }
 
 
@@ -470,7 +523,24 @@ function getMatrixProduct(m1, m2) {
  *
  */
 function evaluateTicTacToePosition(position) {
-    throw new Error('Not implemented');
+    for (let lane of getLanes()) {
+        lane.length = 3;
+        if ([...lane].every(x => x === lane[0])) {
+            if (lane[0]) {
+                return lane[0];
+            }
+        }
+    }
+    return undefined;
+    
+    function* getLanes() {
+        yield* position;
+        yield position.map(x => x[0]);
+        yield position.map(x => x[1]);
+        yield position.map(x => x[2]);
+        yield position.map((x, i) => x[i]);
+        yield position.map((x, i) => x[x.length - i - 1]);
+    }
 }
 
 
