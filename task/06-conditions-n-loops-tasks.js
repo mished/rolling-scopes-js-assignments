@@ -132,7 +132,15 @@ function isTriangle(a,b,c) {
  *  
  */
 function doRectanglesOverlap(rect1, rect2) {
-    throw new Error('Not implemented');
+    rect1.right = rect1.left + rect1.width;
+    rect1.bottom = rect1.top + rect1.height;
+    rect2.right = rect2.left + rect2.width;
+    rect2.bottom = rect2.top + rect2.height;
+
+    return rect1.left < rect2.right
+        && rect1.right > rect2.left
+        && rect1.top < rect2.bottom
+        && rect1.bottom > rect2.top;
 }
 
 
@@ -163,7 +171,8 @@ function doRectanglesOverlap(rect1, rect2) {
  *   
  */
 function isInsideCircle(circle, point) {
-    throw new Error('Not implemented');
+    const center = circle.center;
+    return circle.radius > Math.hypot(point.x - center.x, point.y - center.y);
 }
 
 
@@ -264,7 +273,7 @@ function reverseInteger(num) {
     while (num > 0) {
         res *= 10;
         res += num % 10;
-        num = num / 10 >>> 0;
+        num = Math.trunc(num / 10);
     }
     return res;
 }
@@ -291,7 +300,35 @@ function reverseInteger(num) {
  *   4916123456789012 => false
  */
 function isCreditCardNumber(ccn) {
-    throw new Error('Not implemented');
+    let sum = 0;
+    let i = 1;
+    for (let digit of getDigits(ccn)) {
+        sum += processCcnDigit(digit, i);
+        i += 1;
+    }
+    return sum % 10 === 0;
+
+    function processCcnDigit(digit, i) {
+        if (i % 2 === 0) {
+            digit *= 2;
+            if (digit > 9) { digit -= 9; }
+        }
+        return digit;
+    }
+
+    function* getDigits(ccn) {
+        if (!Number.isSafeInteger(ccn)) {
+            yield* ccn.toString(10)
+                .split('')
+                .reverse()
+                .map(x => +x);
+            return;
+        }
+        while (ccn > 0) {
+            yield ccn % 10;
+            ccn = Math.trunc(ccn / 10);
+        }
+    }
 }
 
 
@@ -320,7 +357,7 @@ function getDigitalRoot(num) {
         let res = 0;
         while (num > 0) {
             res += num % 10;
-            num = num / 10 >>> 0;
+            num = Math.trunc(num / 10);
         }
         return res;
     }
@@ -397,7 +434,27 @@ function isBracketsBalanced(str) {
  *
  */
 function timespanToHumanString(startDate, endDate) {
-    throw new Error('Not implemented');
+    const second = 1000;
+    const minute = 60 * second;
+    const hour   = 60 * minute;
+    const day    = 24 * hour;
+    const month  = 30 * day;
+    const year   = 12 * month;
+    const round  = (ts, units) => Math.round((ts - 1) / units);
+    
+    const timespan = Math.abs(startDate.getTime() - endDate.getTime());
+    
+    if (timespan <= 45  * second) { return 'a few seconds ago';                      }
+    if (timespan <= 90  * second) { return 'a minute ago';                           }
+    if (timespan <= 45  * minute) { return `${round(timespan, minute)} minutes ago`; }
+    if (timespan <= 90  * minute) { return 'an hour ago';                            }
+    if (timespan <= 22  * hour  ) { return `${round(timespan, hour)} hours ago`;     }
+    if (timespan <= 36  * hour  ) { return 'a day ago';                              }
+    if (timespan <= 25  * day   ) { return `${round(timespan, day)} days ago`;       }
+    if (timespan <= 45  * day   ) { return 'a month ago';                            }
+    if (timespan <= 345 * day   ) { return `${round(timespan, month)} months ago`;   }
+    if (timespan <= 545 * day   ) { return 'a year ago';                             }
+    return `${round(timespan, year)} years ago`;
 }
 
 
@@ -424,7 +481,7 @@ function toNaryString(num, n) {
     let res = '';
     while (num !== 0) {
         res = num % n + res;
-        num = num / n >>> 0;
+        num = Math.trunc(num / n);
     }
     return res;
 }
@@ -525,10 +582,9 @@ function getMatrixProduct(m1, m2) {
 function evaluateTicTacToePosition(position) {
     for (let lane of getLanes()) {
         lane.length = 3;
-        if ([...lane].every(x => x === lane[0])) {
-            if (lane[0]) {
-                return lane[0];
-            }
+        const first = lane[0];
+        if (first && [...lane].every(x => x === first)) {
+            return first;
         }
     }
     return undefined;
