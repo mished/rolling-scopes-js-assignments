@@ -34,24 +34,17 @@
  */
 function* get99BottlesOfBeer() {
     let bottlesCount = 99;
-    while (bottlesCount > 0) {
-        yield `${getWord(bottlesCount)} on the wall, ${getWord(bottlesCount)}.`;
+    while (true) {
+        yield `${bottlesCount} bottles of beer on the wall, ${bottlesCount} bottles of beer.`;
         bottlesCount -= 1;
-        yield `Take one down and pass it around, ${getWord(bottlesCount)} on the wall.`;
+        if (bottlesCount === 1) { break; }
+        yield `Take one down and pass it around, ${bottlesCount} bottles of beer on the wall.`;
     }
+    yield `Take one down and pass it around, 1 bottle of beer on the wall.`
+    yield `1 bottle of beer on the wall, 1 bottle of beer.`;
+    yield `Take one down and pass it around, no more bottles of beer on the wall.`;
     yield `No more bottles of beer on the wall, no more bottles of beer.`;
     yield `Go to the store and buy some more, 99 bottles of beer on the wall.`;
-    
-    function getWord(bottles) {
-        switch (bottles) {
-            case 1:
-                return '1 bottle of beer';
-            case 0:
-                return 'no more bottles of beer';
-            default:
-                return `${bottles} bottles of beer`;
-        }
-    }
 }
 
 
