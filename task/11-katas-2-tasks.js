@@ -32,9 +32,43 @@
  *   '|_| _| _||_||_ |_ |_||_||_|\n'+     => 823856989
  *   '|_||_  _||_| _||_| _||_| _|\n',
  *
+ *
+ *   Truth table:
+ *
+ *   _ a _
+ *   f g b
+ *   e d c
+ * 
+ *   0 => abcdefg => 1111110
+ *   ...
  */
 function parseBankAccount(bankAccount) {
-    throw new Error('Not implemented');
+    const offset = bankAccount.indexOf('\n');
+    const row2 = offset + 1;
+    const row3 = offset * 2 + 2;
+    const binaryDigits = [];
+
+    const truthTable = {
+        '1111110': 0,
+        '0110000': 1,
+        '1101101': 2,
+        '1111001': 3,
+        '0110011': 4,
+        '1011011': 5,
+        '1011111': 6,
+        '1110000': 7,
+        '1111111': 8,
+        '1111011': 9
+    };
+
+    for (let i = 0; i < offset; i += 3) {
+        const digit = [i + 1, row2 + i + 2, row3 + i + 2,
+            row3 + i + 1, row3 + i, row2 + i, row2 + i + 1];
+        const binaryDigitStr = digit.map(x => +(bankAccount[x] !== ' ')).join('');
+        binaryDigits.push(binaryDigitStr);
+    }
+
+    return +binaryDigits.map(x => truthTable[x]).join('');
 }
 
 
@@ -135,12 +169,12 @@ function getPokerHandRank(hand) {
  *    '+-------------+\n'
  */
 function* getFigureRectangles(figure) {
-   throw new Error('Not implemented');
+    throw new Error('Not implemented');
 }
 
 
 module.exports = {
-    parseBankAccount : parseBankAccount,
+    parseBankAccount: parseBankAccount,
     wrapText: wrapText,
     PokerRank: PokerRank,
     getPokerHandRank: getPokerHandRank,
