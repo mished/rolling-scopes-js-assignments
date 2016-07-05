@@ -3,7 +3,7 @@
   "version": "0.9.1",
   "description": "JS training tasks",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --harmony_rest_parameters",
+    "test": "./node_modules/.bin/mocha",
     "test-watch": "npm run test -- --watch",
     "test-debug": "npm run test -- --debug-brk"
   },
