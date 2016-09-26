@@ -56,7 +56,88 @@ function createCompassPoints() {
  *   'nothing to do' => 'nothing to do'
  */
 function* expandBraces(str) {
-    throw new Error('Not implemented');
+    const OPEN_BR = '{';
+    const CLOSE_BR = '}';
+    const SEPARATOR = ',';
+
+    yield* parse(str);
+
+    function parse(str) {
+        let items = [''];
+        let pos = 0;
+
+        while (str[pos]) {
+            if (str[pos] !== OPEN_BR) {
+                items = combine(items, [readOuterWord()]);
+            } else {
+                pos += 1;
+                items = combine(items, parseExpr());
+            }
+        }
+
+        return items;
+
+        function parseExpr() {
+            let items = [];
+            let sepCount = 0;
+
+            while (str[pos] !== CLOSE_BR) {
+                if (str[pos] === SEPARATOR) {
+                    pos += 1;
+                    sepCount += 1;
+                } else {
+                    items = items.concat(parseExprPart());
+                }
+            }
+
+            pos += 1;
+            if (items.length < sepCount + 1) {
+                items.push(''); // hack for empty alternative: {abc,}
+            }
+            return items;
+        }
+
+        function parseExprPart() {
+            let items = [''];
+
+            while (str[pos] !== SEPARATOR && str[pos] !== CLOSE_BR) {
+                if (str[pos] !== OPEN_BR) {
+                    items = combine(items, [readInnerWord()]);
+                } else {
+                    pos += 1;
+                    items = combine(items, parseExpr());
+                }
+            }
+
+            return items;
+        }
+
+        function combine(leftItems, rightItems) {
+            const res = [];
+            for (let left of leftItems)
+                for (let right of rightItems)
+                    res.push(left + right);
+            return res;
+        }
+
+        function readOuterWord() {
+            return readUntil([OPEN_BR]);
+        }
+
+        function readInnerWord() {
+            return readUntil([SEPARATOR, OPEN_BR, CLOSE_BR]);
+        }
+
+        function readUntil(chars) {
+            let res = '';
+            while (str[pos] && chars.every(x => x !== str[pos])) {
+                res += str[pos];
+                pos += 1;
+            }
+            return res;
+        }
+    }
+
 }
 
 
