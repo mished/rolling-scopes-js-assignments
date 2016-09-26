@@ -65,22 +65,19 @@ function* expandBraces(str) {
     function parse(str) {
         let items = [''];
         let pos = 0;
-
         while (str[pos]) {
             if (str[pos] !== OPEN_BR) {
-                items = combine(items, [readOuterWord()]);
+                items = combine(items, [readUntil([OPEN_BR])]);
             } else {
                 pos += 1;
                 items = combine(items, parseExpr());
             }
         }
-
         return items;
 
         function parseExpr() {
             let items = [];
             let sepCount = 0;
-
             while (str[pos] !== CLOSE_BR) {
                 if (str[pos] === SEPARATOR) {
                     pos += 1;
@@ -89,26 +86,22 @@ function* expandBraces(str) {
                     items = items.concat(parseExprPart());
                 }
             }
-
+            // handle empty alternative: {abc,}
+            if (items.length < sepCount + 1) items.push('');
             pos += 1;
-            if (items.length < sepCount + 1) {
-                items.push(''); // hack for empty alternative: {abc,}
-            }
             return items;
         }
 
         function parseExprPart() {
             let items = [''];
-
             while (str[pos] !== SEPARATOR && str[pos] !== CLOSE_BR) {
                 if (str[pos] !== OPEN_BR) {
-                    items = combine(items, [readInnerWord()]);
+                    items = combine(items, [readUntil([SEPARATOR, OPEN_BR, CLOSE_BR])]);
                 } else {
                     pos += 1;
                     items = combine(items, parseExpr());
                 }
             }
-
             return items;
         }
 
@@ -120,14 +113,6 @@ function* expandBraces(str) {
             return res;
         }
 
-        function readOuterWord() {
-            return readUntil([OPEN_BR]);
-        }
-
-        function readInnerWord() {
-            return readUntil([SEPARATOR, OPEN_BR, CLOSE_BR]);
-        }
-
         function readUntil(chars) {
             let res = '';
             while (str[pos] && chars.every(x => x !== str[pos])) {
@@ -137,7 +122,6 @@ function* expandBraces(str) {
             return res;
         }
     }
-
 }
 
 
@@ -230,26 +214,26 @@ function extractRanges(nums) {
             return extract(result.val, nums.slice(result.next));
         }
         return extract(`${acc},${result.val}`, nums.slice(result.next));
+    }
 
-        function extractSingle(nums) {
-            return {
-                val: nums[0].toString(),
-                next: 1
-            };
-        }
+    function extractSingle(nums) {
+        return {
+            val: nums[0].toString(),
+            next: 1
+        };
+    }
 
-        function extractRange(nums) {
-            const i = nums.findIndex((x, i, arr) => arr[i + 1] - arr[i] !== 1);
-            return {
-                val: `${nums[0]}-${nums[i]}`,
-                next: i + 1
-            };
-        }
+    function extractRange(nums) {
+        const i = nums.findIndex((x, i, arr) => arr[i + 1] - arr[i] !== 1);
+        return {
+            val: `${nums[0]}-${nums[i]}`,
+            next: i + 1
+        };
+    }
 
-        function startsWithRange(nums) {
-            return nums[0] === nums[1] - 1
-                && nums[1] === nums[2] - 1;
-        }
+    function startsWithRange(nums) {
+        return nums[0] === nums[1] - 1
+            && nums[1] === nums[2] - 1;
     }
 }
 
