@@ -38,7 +38,7 @@
  *   _ a _
  *   f g b
  *   e d c
- * 
+ *
  *   0 => abcdefg => 1111110
  *   ...
  */
@@ -63,7 +63,7 @@ function parseBankAccount(bankAccount) {
 
     for (let i = 0; i < offset; i += 3) {
         const digit = [i + 1, row2 + i + 2, row3 + i + 2,
-            row3 + i + 1, row3 + i, row2 + i, row2 + i + 1];
+        row3 + i + 1, row3 + i, row2 + i, row2 + i + 1];
         const binaryDigitStr = digit.map(x => +(bankAccount[x] !== ' ')).join('');
         binaryDigits.push(binaryDigitStr);
     }
@@ -144,7 +144,80 @@ const PokerRank = {
 }
 
 function getPokerHandRank(hand) {
-    throw new Error('Not implemented');
+
+    const DenominationMap = {
+        '2': 2, '3': 3, '4': 4,
+        '5': 5, '6': 6, '7': 7,
+        '8': 8, '9': 9, '10': 10,
+        'J': 11, 'Q': 12, 'K': 13,
+        'A': 14
+    };
+
+    const SuitMap = {
+        '♠': 0, '♥': 1, '♦': 2, '♣': 3
+    }
+
+    const incProp = (obj, prop) => {
+        if (obj[prop]) {
+            obj[prop] += 1;
+        } else {
+            obj[prop] = 1;
+        }
+    };
+
+    const normalizeHand = hand => {
+        const result = hand.reduce((hand, card) => {
+            const [d, s] = [DenominationMap[card.slice(0, -1)], SuitMap[card.slice(-1)]];
+            incProp(hand.denominations, d);
+            incProp(hand.suits, s);
+            hand.sortedDenominations.push(d);
+            return hand;
+        }, { sortedDenominations: [], denominations: [], suits: [] });
+        result.sortedDenominations.sort((a, b) => a - b);
+        if (result.denominations['14'] && result.denominations['2']) { // low Ace
+            result.sortedDenominations.unshift(1);
+            result.sortedDenominations.pop();
+        }
+        return result;
+    };
+
+    const hasCountOfKind = (hand, count, matchesCount) => {
+        if (!matchesCount) {
+            return hand.denominations.some(c => c === count);
+        }
+        return hand.denominations.reduce((r, c) => (c === count) ? r + 1 : r, 0) === matchesCount;
+    };
+
+    const isStraight = hand => {
+        const sortedHand = hand.sortedDenominations;
+        for (let i = 0; i < sortedHand.length - 1; ++i) {
+            if (sortedHand[i + 1] - sortedHand[i] !== 1) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    const isFlush = hand => hand.suits.some(count => count === 5);
+
+    const rankPredicates = new Map([
+        [PokerRank.StraightFlush, hand => isFlush(hand) && isStraight(hand)],
+        [PokerRank.FourOfKind, hand => hasCountOfKind(hand, 4)],
+        [PokerRank.FullHouse, hand => hasCountOfKind(hand, 2) && hasCountOfKind(hand, 3)],
+        [PokerRank.Flush, isFlush],
+        [PokerRank.Straight, isStraight],
+        [PokerRank.ThreeOfKind, hand => hasCountOfKind(hand, 3)],
+        [PokerRank.TwoPairs, hand => hasCountOfKind(hand, 2, 2)],
+        [PokerRank.OnePair, hand => hasCountOfKind(hand, 2)],
+        [PokerRank.HighCard, _ => true]
+    ]);
+
+    const nHand = normalizeHand(hand);
+    for (let [rank, pred] of rankPredicates.entries()) {
+        if (pred(nHand)) {
+            return rank;
+        }
+    }
 }
 
 
@@ -154,10 +227,10 @@ function getPokerHandRank(hand) {
  * The task is to break the figure in the rectangles it is made of.
  *
  * NOTE: The order of rectanles does not matter.
- * 
+ *
  * @param {string} figure
  * @return {Iterable.<string>} decomposition to basic parts
- * 
+ *
  * @example
  *
  *    '+------------+\n'+
