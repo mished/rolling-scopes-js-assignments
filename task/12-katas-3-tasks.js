@@ -30,18 +30,22 @@
 function findStringInSnakingPuzzle(puzzle, searchStr) {
 
     class RouteMap {
-        constructor(route) {
-            this._route = route;
+        constructor() {
+            this._route = {};
             this._width = puzzle[0].length;
             this._height = puzzle.length;
         }
 
-        copy() {
-            return new RouteMap(Object.assign({}, this._route));
+        _key(x, y) {
+            return `${x},${y}`;
+        }
+
+        markAvailable(x, y) {
+            this._route[this._key(x, y)] = false;
         }
 
         markVisited(x, y) {
-            this._route[`${x},${y}`] = true;
+            this._route[this._key(x, y)] = true;
         }
 
         isAvailable(x, y) {
@@ -49,8 +53,15 @@ function findStringInSnakingPuzzle(puzzle, searchStr) {
                 && x < this._width
                 && y >= 0
                 && y < this._height
-                && !this._route[`${x},${y}`];
+                && !this._route[this._key(x, y)];
         }
+    }
+
+    function* getSiblings(x, y) {
+        yield [x - 1, y];
+        yield [x + 1, y];
+        yield [x, y - 1];
+        yield [x, y + 1];
     }
 
     function checkRoute(x, y, search, route) {
@@ -62,15 +73,20 @@ function findStringInSnakingPuzzle(puzzle, searchStr) {
         }
         route.markVisited(x, y);
         const nextSearch = search.slice(1);
-        return checkRoute(x - 1, y, nextSearch, route.copy())
-            || checkRoute(x + 1, y, nextSearch, route.copy())
-            || checkRoute(x, y - 1, nextSearch, route.copy())
-            || checkRoute(x, y + 1, nextSearch, route.copy());
+
+        for (let [sx, sy] of getSiblings(x, y)) {
+            if (checkRoute(sx, sy, nextSearch, route)) {
+                return true;
+            }
+        }
+
+        route.markAvailable(x, y);
+        return false;
     }
 
     for (let y = 0; y < puzzle.length; ++y) {
         for (let x = 0; x < puzzle[0].length; ++x) {
-            if (checkRoute(x, y, searchStr, new RouteMap({}))) {
+            if (checkRoute(x, y, searchStr, new RouteMap())) {
                 return true;
             }
         }
@@ -131,18 +147,18 @@ function getMostProfitFromStockQuotes(quotes) {
  *
  */
 function UrlShortener() {
-    this.urlAllowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"+
-                           "abcdefghijklmnopqrstuvwxyz"+
-                           "0123456789-_.~!*'();:@&=+$,/?#[]";
+    this.urlAllowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+        "abcdefghijklmnopqrstuvwxyz" +
+        "0123456789-_.~!*'();:@&=+$,/?#[]";
 }
 
 UrlShortener.prototype = {
 
-    encode: function(url) {
+    encode: function (url) {
         throw new Error('Not implemented');
     },
 
-    decode: function(code) {
+    decode: function (code) {
         throw new Error('Not implemented');
     }
 }
